@@ -1,0 +1,10 @@
+node_modules/
+.env
+npm-debug.log*
+*.log
+.DS_Store
+Thumbs.db
+
+# Nao versionar musicas reais (evita subir arquivos protegidos por direitos
+# autorais para um repositorio publico). Mantenha .gitkeep para preservar as pastas.
+stations/**/*.mp3

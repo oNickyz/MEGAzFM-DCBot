@@ -1,0 +1,32 @@
+MEGAzLand Lofi Bot - Organizer Report
+============================================
+Source: C:\Users\Nicholas Ribeiro\Downloads\HoliznaCC0 - Public Domain Lofi
+Output: C:\Users\Nicholas Ribeiro\Downloads\HoliznaCC0 - Public Domain Lofi\lofi_bot_music
+MP3s found: 17
+ffprobe available: no
+
+COPIED: 01 HoliznaCC0 - Fractured.mp3 -> 001 - 01 HoliznaCC0 - Fractured.mp3
+COPIED: 02 HoliznaCC0 - Peaceful Drift ( Lofi , Nostalgic , Calm ).mp3 -> 002 - 02 HoliznaCC0 - Peaceful Drift ( Lofi , Nostalgic , Calm ).mp3
+COPIED: 03 HoliznaCC0 - Down Time ( LoFi , Peaceful ).mp3.mp3 -> 003 - 03 HoliznaCC0 - Down Time ( LoFi , Peaceful ).mp3.mp3
+COPIED: 04 HoliznaCC0 - Forgotten Keep Sakes ( LoFi , Sad ).mp3.mp3 -> 004 - 04 HoliznaCC0 - Forgotten Keep Sakes ( LoFi , Sad ).mp3.mp3
+COPIED: 05 HoliznaCC0 - When I Was Human ( LoFi , Chill ).mp3 -> 005 - 05 HoliznaCC0 - When I Was Human ( LoFi , Chill ).mp3
+COPIED: 06 HoliznaCC0 - Ode To Forgetting ( Lofi , Chill , Relax ).mp3 -> 006 - 06 HoliznaCC0 - Ode To Forgetting ( Lofi , Chill , Relax ).mp3
+COPIED: 07 HoliznaCC0 - Ocean Breeze ( LoFi , Ukulele , Peaceful ) .mp3.mp3 -> 007 - 07 HoliznaCC0 - Ocean Breeze ( LoFi , Ukulele , Peaceful ) .mp3.mp3
+COPIED: 08 HoliznaCC0 - Wave Maker ( Lofi , Dreamy , Retro ).mp3 -> 008 - 08 HoliznaCC0 - Wave Maker ( Lofi , Dreamy , Retro ).mp3
+COPIED: 09 HoliznaCC0 - Complicated Feelings ( Lofi , Dreamy , Relaxed ).mp3 -> 009 - 09 HoliznaCC0 - Complicated Feelings ( Lofi , Dreamy , Relaxed ).mp3
+COPIED: 10 HoliznaCC0 - Wetlands ( Lofi , Calm , Relaxed ).mp3 -> 010 - 10 HoliznaCC0 - Wetlands ( Lofi , Calm , Relaxed ).mp3
+COPIED: 11 HoliznaCC0 - Tetrapod ( LoFi , Relaxing ).mp3.mp3 -> 011 - 11 HoliznaCC0 - Tetrapod ( LoFi , Relaxing ).mp3.mp3
+COPIED: 12 HoliznaCC0 - Orchid ( LoFi , Nostalgic ).mp3.mp3 -> 012 - 12 HoliznaCC0 - Orchid ( LoFi , Nostalgic ).mp3.mp3
+COPIED: 13 HoliznaCC0 - Ease into Night ( Lofi , Relax , Chill ).mp3 -> 013 - 13 HoliznaCC0 - Ease into Night ( Lofi , Relax , Chill ).mp3
+COPIED: 14 HoliznaCC0 - Infinite Echoes ( Lofi , Dreamy , Soft ).mp3 -> 014 - 14 HoliznaCC0 - Infinite Echoes ( Lofi , Dreamy , Soft ).mp3
+COPIED: 15 HoliznaCC0 - Into The Mist ( Lofi , Calm , Relaxed ).mp3 -> 015 - 15 HoliznaCC0 - Into The Mist ( Lofi , Calm , Relaxed ).mp3
+COPIED: 16 HoliznaCC0 - Lucid ( Lofi , Dreamy , Chill ).mp3 -> 016 - 16 HoliznaCC0 - Lucid ( Lofi , Dreamy , Chill ).mp3
+COPIED: 17 HoliznaCC0 - Never Sleeping ( Lofi , Dark , Sad ).mp3 -> 017 - 17 HoliznaCC0 - Never Sleeping ( Lofi , Dark , Sad ).mp3
+
+SUMMARY
+-------
+Copied: 17
+Exact duplicates skipped: 0
+Errors: 0
+
+Original files were NOT deleted or modified.

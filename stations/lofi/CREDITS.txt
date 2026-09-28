@@ -1,0 +1,15 @@
+MEGAzLand Lofi Radio
+
+"
+        "Keep the source/license information for each track used by the bot.
+"
+        "Do not assume a track is free to redistribute just because it was free to download.
+
+"
+        "Suggested format for each source:
+"
+        "Artist:
+Track:
+Source:
+License:
+URL:

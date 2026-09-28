@@ -1,0 +1,125 @@
+{
+  "name": "MEGAzLand Lofi Radio",
+  "version": 1,
+  "tracks": [
+    {
+      "index": 1,
+      "title": "01 HoliznaCC0 - Fractured",
+      "file": "music/001 - 01 HoliznaCC0 - Fractured.mp3",
+      "source_name": "01 HoliznaCC0 - Fractured.mp3",
+      "sha256": "5251ab649cbc34e55aa3d266aabf6aea705297971071b98c4722e228a90d5945"
+    },
+    {
+      "index": 2,
+      "title": "02 HoliznaCC0 - Peaceful Drift ( Lofi , Nostalgic , Calm )",
+      "file": "music/002 - 02 HoliznaCC0 - Peaceful Drift ( Lofi , Nostalgic , Calm ).mp3",
+      "source_name": "02 HoliznaCC0 - Peaceful Drift ( Lofi , Nostalgic , Calm ).mp3",
+      "sha256": "fc21d359657c8c7d01fbc7a7a28443569d499ebdb893a46761ee1d87bf8b5afb"
+    },
+    {
+      "index": 3,
+      "title": "03 HoliznaCC0 - Down Time ( LoFi , Peaceful ).mp3",
+      "file": "music/003 - 03 HoliznaCC0 - Down Time ( LoFi , Peaceful ).mp3.mp3",
+      "source_name": "03 HoliznaCC0 - Down Time ( LoFi , Peaceful ).mp3.mp3",
+      "sha256": "cb849614674aca861fdab3599d4e50272bacfc1cd169a91c5ce22725ca4f66a4"
+    },
+    {
+      "index": 4,
+      "title": "04 HoliznaCC0 - Forgotten Keep Sakes ( LoFi , Sad ).mp3",
+      "file": "music/004 - 04 HoliznaCC0 - Forgotten Keep Sakes ( LoFi , Sad ).mp3.mp3",
+      "source_name": "04 HoliznaCC0 - Forgotten Keep Sakes ( LoFi , Sad ).mp3.mp3",
+      "sha256": "c6ddd4d0c2c5b6c9851b58c6dc29cea98ba5a514b49f0980ba66ce9b11c33ecd"
+    },
+    {
+      "index": 5,
+      "title": "05 HoliznaCC0 - When I Was Human ( LoFi , Chill )",
+      "file": "music/005 - 05 HoliznaCC0 - When I Was Human ( LoFi , Chill ).mp3",
+      "source_name": "05 HoliznaCC0 - When I Was Human ( LoFi , Chill ).mp3",
+      "sha256": "a6fed45122d5045af4465f671896618f5b8c09157d189b11e85bd9c981961476"
+    },
+    {
+      "index": 6,
+      "title": "06 HoliznaCC0 - Ode To Forgetting ( Lofi , Chill , Relax )",
+      "file": "music/006 - 06 HoliznaCC0 - Ode To Forgetting ( Lofi , Chill , Relax ).mp3",
+      "source_name": "06 HoliznaCC0 - Ode To Forgetting ( Lofi , Chill , Relax ).mp3",
+      "sha256": "d2a6d8b50eafa9abbd659ff895a370ce5c3b72da9c039cd81e64b8cd6ee11cf5"
+    },
+    {
+      "index": 7,
+      "title": "07 HoliznaCC0 - Ocean Breeze ( LoFi , Ukulele , Peaceful ) .mp3",
+      "file": "music/007 - 07 HoliznaCC0 - Ocean Breeze ( LoFi , Ukulele , Peaceful ) .mp3.mp3",
+      "source_name": "07 HoliznaCC0 - Ocean Breeze ( LoFi , Ukulele , Peaceful ) .mp3.mp3",
+      "sha256": "3dbc9713e17d3e23d942d36510ba046210f69d4e2df4ebb07e7d2ce4c2e6b358"
+    },
+    {
+      "index": 8,
+      "title": "08 HoliznaCC0 - Wave Maker ( Lofi , Dreamy , Retro )",
+      "file": "music/008 - 08 HoliznaCC0 - Wave Maker ( Lofi , Dreamy , Retro ).mp3",
+      "source_name": "08 HoliznaCC0 - Wave Maker ( Lofi , Dreamy , Retro ).mp3",
+      "sha256": "e525e8c2953e4a10c31ea6ca42449f793f57bf11066a570b52a2389820a782f7"
+    },
+    {
+      "index": 9,
+      "title": "09 HoliznaCC0 - Complicated Feelings ( Lofi , Dreamy , Relaxed )",
+      "file": "music/009 - 09 HoliznaCC0 - Complicated Feelings ( Lofi , Dreamy , Relaxed ).mp3",
+      "source_name": "09 HoliznaCC0 - Complicated Feelings ( Lofi , Dreamy , Relaxed ).mp3",
+      "sha256": "1b8197ceec2ff2dffc4fa83f608a312501f0df711e1aa4098df26b74c537b7ef"
+    },
+    {
+      "index": 10,
+      "title": "10 HoliznaCC0 - Wetlands ( Lofi , Calm , Relaxed )",
+      "file": "music/010 - 10 HoliznaCC0 - Wetlands ( Lofi , Calm , Relaxed ).mp3",
+      "source_name": "10 HoliznaCC0 - Wetlands ( Lofi , Calm , Relaxed ).mp3",
+      "sha256": "81d8e723ebc2dc92eec354261b3df983b3a418981fbae6fc3476ae73a1979ca8"
+    },
+    {
+      "index": 11,
+      "title": "11 HoliznaCC0 - Tetrapod ( LoFi , Relaxing ).mp3",
+      "file": "music/011 - 11 HoliznaCC0 - Tetrapod ( LoFi , Relaxing ).mp3.mp3",
+      "source_name": "11 HoliznaCC0 - Tetrapod ( LoFi , Relaxing ).mp3.mp3",
+      "sha256": "676320de208dfcc3464132e793ddc571b745c0538bb8af135a901d816c180e24"
+    },
+    {
+      "index": 12,
+      "title": "12 HoliznaCC0 - Orchid ( LoFi , Nostalgic ).mp3",
+      "file": "music/012 - 12 HoliznaCC0 - Orchid ( LoFi , Nostalgic ).mp3.mp3",
+      "source_name": "12 HoliznaCC0 - Orchid ( LoFi , Nostalgic ).mp3.mp3",
+      "sha256": "869711fc9584b13dcddcea58b7e92fffc7ea737977a161d935db24a8f2696267"
+    },
+    {
+      "index": 13,
+      "title": "13 HoliznaCC0 - Ease into Night ( Lofi , Relax , Chill )",
+      "file": "music/013 - 13 HoliznaCC0 - Ease into Night ( Lofi , Relax , Chill ).mp3",
+      "source_name": "13 HoliznaCC0 - Ease into Night ( Lofi , Relax , Chill ).mp3",
+      "sha256": "24a6b97a0239b252dc2f552584bbcfe767e74bf57c9d6adddc34daa39f45fa96"
+    },
+    {
+      "index": 14,
+      "title": "14 HoliznaCC0 - Infinite Echoes ( Lofi , Dreamy , Soft )",
+      "file": "music/014 - 14 HoliznaCC0 - Infinite Echoes ( Lofi , Dreamy , Soft ).mp3",
+      "source_name": "14 HoliznaCC0 - Infinite Echoes ( Lofi , Dreamy , Soft ).mp3",
+      "sha256": "0e526a82107409f9937974100dd176e4f5b6c0af115ce6ad8f68d36dc2fd1702"
+    },
+    {
+      "index": 15,
+      "title": "15 HoliznaCC0 - Into The Mist ( Lofi , Calm , Relaxed )",
+      "file": "music/015 - 15 HoliznaCC0 - Into The Mist ( Lofi , Calm , Relaxed ).mp3",
+      "source_name": "15 HoliznaCC0 - Into The Mist ( Lofi , Calm , Relaxed ).mp3",
+      "sha256": "51abc671658f942ef54ad7340390e2a7e7afa7b2b7a9a223aafb955b27cb3074"
+    },
+    {
+      "index": 16,
+      "title": "16 HoliznaCC0 - Lucid ( Lofi , Dreamy , Chill )",
+      "file": "music/016 - 16 HoliznaCC0 - Lucid ( Lofi , Dreamy , Chill ).mp3",
+      "source_name": "16 HoliznaCC0 - Lucid ( Lofi , Dreamy , Chill ).mp3",
+      "sha256": "7378b49dde3aef61d0f52aba71a06089e8513cf7cf9f7b4c33048cc2d350b05e"
+    },
+    {
+      "index": 17,
+      "title": "17 HoliznaCC0 - Never Sleeping ( Lofi , Dark , Sad )",
+      "file": "music/017 - 17 HoliznaCC0 - Never Sleeping ( Lofi , Dark , Sad ).mp3",
+      "source_name": "17 HoliznaCC0 - Never Sleeping ( Lofi , Dark , Sad ).mp3",
+      "sha256": "0034f812be6e3709aec8f5b9438e7b5aa6163e24212d9df93693f3b4a3f445a1"
+    }
+  ]
+}
