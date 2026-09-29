@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>MEGAzFM</title>
+<style>
+/* ============================================================
+   Design plan
+   Color: --ink (near-black bg), --paper (warm off-white text on dark),
+           --signal (amber dial accent), --wave (violet secondary/brand),
+           --line (hairline), --muted (secondary text)
+   Type: --font-display (Fraunces, editorial serif for headlines),
+         --font-body (IBM Plex Sans), --font-mono (IBM Plex Mono, for
+         config/code/labels - evokes a tuner readout)
+   Layout: full-bleed "on-air" broadcast console - a fixed top dial-bar,
+           a hero with an animated waveform/frequency readout, then
+           stacked console-panel sections (Open Source, Docs, Termos,
+           Privacidade) each styled like a rack module with a label chip.
+   ============================================================ */
+:root{
+  --ink:#0e0c10;
+  --ink-2:#161319;
+  --paper:#f3efe8;
+  --muted:#a79fb0;
+  --signal:#f2a641;
+  --wave:#8a5cff;
+  --line:#2a2530;
+  --danger:#e0637a;
+  --font-display:'Fraunces',Georgia,'Times New Roman',serif;
+  --font-body:'IBM Plex Sans',system-ui,-apple-system,Segoe UI,sans-serif;
+  --font-mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Consolas,monospace;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --ink:#f6f2ea;
+    --ink-2:#ffffff;
+    --paper:#19151d;
+    --muted:#6b6274;
+    --signal:#b5691a;
+    --wave:#5b34c9;
+    --line:#e2dccf;
+    color-scheme:light;
+  }
+}
+:root[data-theme="light"]{
+  --ink:#f6f2ea;
+  --ink-2:#ffffff;
+  --paper:#19151d;
+  --muted:#6b6274;
+  --signal:#b5691a;
+  --wave:#5b34c9;
+  --line:#e2dccf;
+  color-scheme:light;
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--ink);
+  color:var(--paper);
+  font-family:var(--font-body);
+  margin:0;
+  padding-inline:0;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-family:var(--font-display);text-wrap:balance;margin:0;}
+a{color:inherit;}
+.wrap{max-width:920px;margin:0 auto;padding-inline:20px;}
+.mono{font-family:var(--font-mono);}
+.eyebrow{
+  font-family:var(--font-mono);
+  font-size:12px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--signal);
+}
+
+/* top dial bar */
+header.dial{
+  position:sticky;
+  top:env(safe-area-inset-top,0px);
+  z-index:20;
+  background:color-mix(in srgb, var(--ink) 88%, transparent);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);
+}
+.dial-inner{
+  max-width:920px;margin:0 auto;padding:14px 20px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  flex-wrap:wrap;
+  row-gap:10px;
+}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-size:19px;letter-spacing:.01em;min-width:0;flex:none;}
+.brand-mark{width:26px;height:26px;flex:none;}
+/* LOGO PLACEHOLDER:
+   Para usar uma logo propria, substitua o <svg class="brand-mark">...</svg>
+   abaixo por <img class="brand-mark" src="sua-logo.svg" alt=""> */
+nav.dial-links{
+  display:flex;gap:16px;font-family:var(--font-mono);font-size:12.5px;letter-spacing:.04em;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;
+  flex:1 1 auto;
+  min-width:0;
+}
+nav.dial-links a{text-decoration:none;color:var(--muted);padding-block:4px;border-bottom:1px solid transparent;transition:color .15s,border-color .15s;white-space:nowrap;flex:none;}
+nav.dial-links a:hover{color:var(--paper);border-color:var(--signal);}
+.gh-btn{
+  font-family:var(--font-mono);font-size:12.5px;letter-spacing:.03em;
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--wave);color:#fff;
+  padding:9px 14px;border-radius:7px;text-decoration:none;white-space:nowrap;
+  border:1px solid color-mix(in srgb, var(--wave) 70%, black 0%);
+  flex:none;
+}
+.gh-btn:hover{filter:brightness(1.08);}
+
+@media (max-width:680px){
+  .dial-inner{justify-content:flex-start;}
+  .brand{order:1;}
+  .gh-btn{order:2;margin-left:auto;padding:8px 12px;font-size:12px;}
+  nav.dial-links{order:3;flex:1 1 100%;justify-content:flex-start;gap:14px;}
+}
+
+/* hero */
+.hero{padding-block:76px 64px;position:relative;overflow:hidden;}
+.freq{
+  font-family:var(--font-mono);font-size:13px;color:var(--muted);
+  display:flex;gap:2px;align-items:flex-end;height:34px;margin-block-end:22px;
+  max-width:100%;overflow:hidden;
+}
+.freq b{width:3px;background:var(--signal);border-radius:2px;opacity:.55;display:block;flex:none;}
+@media (max-width:520px){
+  .hero{padding-block:52px 44px;}
+}
+.hero h1{font-size:clamp(34px,6vw,58px);line-height:1.04;max-width:14ch;}
+.hero h1 em{color:var(--wave);font-style:normal;}
+.hero p.lede{font-size:18px;color:var(--muted);max-width:46ch;margin-block-start:18px;}
+.hero .cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-block-start:30px;}
+.btn{
+  font-family:var(--font-mono);font-size:13px;letter-spacing:.03em;
+  padding:12px 18px;border-radius:8px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;
+}
+.btn-primary{background:var(--wave);color:#fff;}
+.btn-primary:hover{filter:brightness(1.08);}
+.btn-ghost{border:1px solid var(--line);color:var(--paper);}
+.btn-ghost:hover{border-color:var(--signal);}
+.hero-note{margin-block-start:16px;font-size:12.5px;color:var(--muted);font-family:var(--font-mono);}
+
+/* console panels */
+.panel{border-top:1px solid var(--line);padding-block:52px;}
+.panel-tag{
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);border:1px solid var(--line);border-radius:100px;padding:5px 11px;display:inline-block;
+}
+.panel h2{font-size:clamp(24px,3.4vw,32px);margin-block-start:14px;max-width:22ch;}
+.panel .lede{color:var(--muted);max-width:56ch;margin-block-start:10px;font-size:15.5px;}
+
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-block-start:30px;}
+@media (max-width:700px){.grid3{grid-template-columns:1fr;}}
+.card{
+  border:1px solid var(--line);background:var(--ink-2);border-radius:10px;padding:18px;min-width:0;
+}
+.card .k{font-family:var(--font-mono);font-size:11px;color:var(--signal);letter-spacing:.06em;}
+.card h3{font-size:16px;margin-block-start:8px;}
+.card p{font-size:14px;color:var(--muted);margin-block-start:8px;}
+
+.oss-box{
+  margin-block-start:30px;border:1px solid var(--line);border-radius:12px;background:var(--ink-2);
+  padding:26px;display:grid;gap:16px;
+}
+.oss-row{display:grid;grid-template-columns:22px 1fr;gap:12px;align-items:start;}
+.oss-row .dot{width:8px;height:8px;border-radius:50%;background:var(--signal);margin-block-start:7px;}
+.oss-row p{margin:0;font-size:14.5px;color:var(--paper);}
+.oss-row p b{color:var(--paper);}
+
+.license-note{
+  margin-block-start:22px;border:1px solid var(--line);
+  background:var(--ink-2);
+  border-radius:10px;padding:16px 18px;font-size:14px;
+}
+.license-note .eyebrow{color:var(--signal);}
+.license-note p{margin:8px 0 0;color:var(--paper);}
+.license-note code{font-family:var(--font-mono);background:color-mix(in srgb, var(--signal) 16%, transparent);padding:2px 6px;border-radius:4px;}
+
+table.cmds{width:100%;border-collapse:collapse;margin-block-start:18px;font-size:14px;}
+table.cmds th{text-align:left;font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding-block-end:8px;border-bottom:1px solid var(--line);}
+table.cmds td{padding:10px 0;border-bottom:1px solid var(--line);vertical-align:top;}
+table.cmds td:first-child{font-family:var(--font-mono);color:var(--signal);white-space:nowrap;padding-right:14px;}
+.tablewrap{overflow-x:auto;}
+
+.stations-diagram{display:flex;gap:10px;margin-block-start:24px;flex-wrap:wrap;min-width:0;}
+.station-chip{min-width:0;overflow-wrap:anywhere;}
+.station-chip{
+  font-family:var(--font-mono);font-size:12px;border:1px solid var(--line);border-radius:8px;
+  padding:8px 12px;color:var(--muted);
+}
+.station-chip b{color:var(--paper);}
+
+.legal h3{font-size:18px;margin-block-start:26px;}
+.legal p, .legal li{font-size:14.5px;color:var(--muted);}
+.legal ul{padding-left:20px;}
+.legal-updated{font-family:var(--font-mono);font-size:12px;color:var(--muted);}
+
+.alpha-banner{
+  border-bottom:1px solid var(--line);
+  background:color-mix(in srgb, var(--signal) 12%, var(--ink));
+}
+.alpha-banner .wrap{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding-block:11px;
+}
+.alpha-banner .eyebrow{color:var(--signal);flex:none;}
+.alpha-banner p{margin:0;font-size:13px;color:var(--paper);}
+
+footer{border-top:1px solid var(--line);padding-block:30px;margin-block-start:20px;}
+footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+footer p{font-size:12.5px;color:var(--muted);font-family:var(--font-mono);margin:0;}
+footer .contact{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.copy-btn{
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.02em;
+  border:1px solid var(--line);background:transparent;color:var(--muted);
+  padding:4px 9px;border-radius:6px;cursor:pointer;
+}
+.copy-btn:hover{color:var(--paper);border-color:var(--signal);}
+</style>
+</head>
+<body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<script>
+  // Nome do bot centralizado - mude apenas aqui para atualizar o site inteiro.
+  window.MEGAZFM = { botName: "MEGAzFM", githubUrl: "https://github.com/SEU-USUARIO/megazfm-core" };
+</script>
+
+<header class="dial">
+  <div class="dial-inner">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="16" cy="16" r="15" stroke="currentColor" stroke-opacity=".35"/>
+        <path d="M6 18 L9 14 L12 20 L15 10 L18 22 L21 13 L24 17 L26 15" stroke="#f2a641" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span data-botname>MEGAzFM</span>
+    </div>
+    <nav class="dial-links">
+      <a href="#home">Home</a>
+      <a href="#docs">Docs</a>
+      <a href="#termos">Termos</a>
+      <a href="#privacidade">Privacidade</a>
+    </nav>
+    <a class="gh-btn" data-gh-link href="#" target="_blank" rel="noopener">Ver no GitHub ↗</a>
+  </div>
+</header>
+
+<div class="alpha-banner">
+  <div class="wrap">
+    <span class="eyebrow">Alpha</span>
+    <p><span data-botname>MEGAzFM</span> ainda está em fase alpha: pode conter bugs e mudanças frequentes. O projeto é aberto a contribuições da comunidade — relatos de bugs, sugestões e pull requests são bem-vindos no repositório.</p>
+  </div>
+</div>
+
+<main>
+  <section class="hero wrap" id="home">
+    <div class="freq" aria-hidden="true"></div>
+    <span class="eyebrow">Rádio de código aberto para Discord</span>
+    <h1 style="margin-block-start:12px;">Uma frequência <em>própria</em> para o seu servidor.</h1>
+    <p class="lede"><span data-botname>MEGAzFM</span> é um bot de rádio 24/7 para Discord: toca arquivos MP3 em estações que você organiza, com fila, histórico, volume e controle de reprodução — tudo local, sem depender de serviços externos.</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" data-gh-link href="#" target="_blank" rel="noopener">Open Source no GitHub ↗</a>
+      <a class="btn btn-ghost" href="#docs">Ver documentação</a>
+    </div>
+    <p class="hero-note">Código público. Sem cadastro. Sem telemetria escondida.</p>
+  </section>
+
+  <section class="panel wrap" id="open-source">
+    <span class="panel-tag">Open Source</span>
+    <h2><span data-botname>MEGAzFM</span> Core é um projeto aberto</h2>
+    <p class="lede">O núcleo do bot — reprodução de MP3, sistema de estações, fila, volume e os comandos principais — tem código-fonte público. Isso significa:</p>
+
+    <div class="oss-box">
+      <div class="oss-row"><span class="dot"></span><p><b>Código aberto de verdade.</b> O repositório completo do <span data-botname>MEGAzFM</span> Core está hospedado no GitHub, disponível para leitura por qualquer pessoa.</p></div>
+      <div class="oss-row"><span class="dot"></span><p><b>Fork livre.</b> Qualquer pessoa pode clonar o projeto e hospedar sua própria instância da rádio, no seu próprio servidor Discord.</p></div>
+      <div class="oss-row"><span class="dot"></span><p><b>Modificação permitida pela licença MIT.</b> O código pode ser estudado, adaptado e redistribuído — inclusive comercialmente — desde que o aviso de copyright original seja mantido (veja o resumo abaixo).</p></div>
+      <div class="oss-row"><span class="dot"></span><p><b>Core ≠ instância oficial.</b> A versão pública representa o conjunto de recursos do Core. A instância que roda oficialmente pode incluir extras que não fazem parte deste repositório — o Core sozinho é completo e funcional por conta própria.</p></div>
+    </div>
+
+    <div class="license-note">
+      <span class="eyebrow">Licença: MIT</span>
+      <p>O <span data-botname>MEGAzFM</span> Core é distribuído sob a licença <code>MIT</code>. Qualquer pessoa pode usar, copiar, modificar, fazer fork e redistribuir o código — inclusive para fins comerciais — desde que mantenha o aviso de copyright original. O software é fornecido "como está", sem garantias. O texto completo está no arquivo <code>LICENSE</code> do repositório.</p>
+    </div>
+  </section>
+
+  <section class="panel wrap" id="docs">
+    <span class="panel-tag">Documentação</span>
+    <h2>Como o bot funciona</h2>
+    <p class="lede">Cada pasta dentro de <code class="mono">stations/</code> é uma estação. Uma estação local contém arquivos MP3; uma estação de transmissão contém um arquivo <code class="mono">stream.url</code> apontando para um stream de rádio online.</p>
+
+    <div class="stations-diagram">
+      <span class="station-chip"><b>stations/lofi/</b> — arquivos .mp3</span>
+      <span class="station-chip"><b>stations/chill/</b> — arquivos .mp3</span>
+      <span class="station-chip"><b>stations/radioweb/stream.url</b> — transmissão ao vivo</span>
+    </div>
+
+    <div class="grid3">
+      <div class="card">
+        <div class="k">SEMPRE ONLINE</div>
+        <h3>Sem músicas, sem crash</h3>
+        <p>Se uma estação estiver vazia, o bot continua conectado ao canal de voz e aguarda. Rode <code class="mono">/reload</code> depois de adicionar arquivos.</p>
+      </div>
+      <div class="card">
+        <div class="k">RECONEXÃO</div>
+        <h3>Voz resiliente</h3>
+        <p>Quedas de conexão são detectadas e reconectadas automaticamente, sem tentativas agressivas ou duplicadas.</p>
+      </div>
+      <div class="card">
+        <div class="k">LEVE</div>
+        <h3>Baixo consumo</h3>
+        <p>Nenhum MP3 é carregado inteiro na memória. Histórico e fila são limitados de propósito.</p>
+      </div>
+    </div>
+
+    <div class="tablewrap">
+      <table class="cmds">
+        <tr><th>Comando</th><th>Acesso</th><th>O que faz</th></tr>
+        <tr><td>/nowplaying</td><td>Público</td><td>Mostra a estação e música atual</td></tr>
+        <tr><td>/estacoes</td><td>Público</td><td>Lista estações e disponibilidade</td></tr>
+        <tr><td>/fila</td><td>Público</td><td>Previsão das próximas músicas</td></tr>
+        <tr><td>/historico</td><td>Público</td><td>Últimas músicas tocadas</td></tr>
+        <tr><td>/estacao</td><td>Público (opcional)</td><td>Troca de estação, com cooldown</td></tr>
+        <tr><td>/station, /skip, /reload, /radio</td><td>Administrador</td><td>Controle geral da rádio</td></tr>
+        <tr><td>/volume, /shuffle, /reconnect</td><td>Administrador</td><td>Ajustes de reprodução e conexão</td></tr>
+        <tr><td>/addstream</td><td>Administrador</td><td>Adiciona uma estação de stream online</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section class="panel legal wrap" id="termos">
+    <span class="panel-tag">Legal</span>
+    <h2>Termos de Serviço</h2>
+    <p class="legal-updated">Última revisão: setembro de 2026</p>
+
+    <h3>1. O que é o serviço</h3>
+    <p><span data-botname>MEGAzFM</span> é um bot de rádio para Discord, distribuído como projeto de código aberto (MEGAzFM Core). Servidores que adicionam uma instância do bot fazem isso por sua própria conta, seja usando uma instância hospedada por terceiros, seja hospedando sua própria cópia a partir do código público.</p>
+
+    <h3>2. Uso aceitável</h3>
+    <ul>
+      <li>Não use o bot para violar os Termos de Serviço do Discord.</li>
+      <li>Você é responsável pelo conteúdo de áudio (arquivos MP3 ou streams) configurado na sua própria instância.</li>
+      <li>Não redistribua conteúdo protegido por direitos autorais sem autorização.</li>
+    </ul>
+
+    <h3>3. Sem garantias</h3>
+    <p>O software é fornecido "como está", sem garantia de disponibilidade contínua, ausência de bugs ou adequação a um propósito específico.</p>
+
+    <h3>4. Código aberto</h3>
+    <p>O código do Core está público no GitHub. O uso, modificação e redistribuição do código seguem os termos da licença do projeto (ver seção "Open Source" acima).</p>
+  </section>
+
+  <section class="panel legal wrap" id="privacidade">
+    <span class="panel-tag">Legal</span>
+    <h2>Política de Privacidade</h2>
+    <p class="legal-updated">Última revisão: setembro de 2026</p>
+
+    <h3>1. Dados processados</h3>
+    <p>O bot processa apenas o mínimo necessário para funcionar dentro do Discord: IDs de servidor, canal de voz e, quando configurado, canal de texto para avisos. Comandos de administrador (como troca de estação ou volume) não armazenam dados pessoais.</p>
+
+    <h3>2. O que NÃO é coletado</h3>
+    <ul>
+      <li>Conteúdo de mensagens do servidor.</li>
+      <li>Dados de áudio dos usuários (o bot não grava nem escuta o canal de voz).</li>
+      <li>Informações pessoais além dos identificadores técnicos do Discord necessários para operar.</li>
+    </ul>
+
+    <h3>3. Armazenamento</h3>
+    <p>Configurações de estação e cooldowns ficam apenas em memória/arquivos locais da instância que executa o bot — não existe um servidor central coletando dados de todas as instâncias.</p>
+
+    <h3>4. Instâncias de terceiros</h3>
+    <p>Se você usa uma instância hospedada por outra pessoa (um fork), a política de privacidade pode variar de acordo com quem opera aquela instância específica.</p>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>&copy; 2026 <span data-botname>MEGAzFM</span> — projeto Open Source.</p>
+    <div class="contact">
+      <p class="mono" id="contact-email">contato.megazstudios@gmail.com</p>
+      <button class="copy-btn" id="copy-email-btn" type="button">copiar</button>
+    </div>
+    <p><a data-gh-link href="#" target="_blank" rel="noopener" style="text-decoration:underline;">Código no GitHub</a></p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  try {
+    var cfg = window.MEGAZFM || { botName: "MEGAzFM", githubUrl: "#" };
+    document.querySelectorAll('[data-botname]').forEach(function(el){ el.textContent = cfg.botName; });
+    document.querySelectorAll('[data-gh-link]').forEach(function(el){ el.setAttribute('href', cfg.githubUrl); });
+  } catch (e) { /* mantem os valores padrao no HTML se algo falhar */ }
+
+  // barra de frequencia decorativa (nao interativa, so estetica)
+  var freq = document.querySelector('.freq');
+  if (freq) {
+    var bars = 46;
+    for (var i = 0; i < bars; i++) {
+      var b = document.createElement('b');
+      var h = 6 + Math.round(Math.abs(Math.sin(i * 0.7)) * 26);
+      b.style.height = h + 'px';
+      freq.appendChild(b);
+    }
+  }
+
+  // copiar e-mail de contato
+  var copyBtn = document.getElementById('copy-email-btn');
+  var emailEl = document.getElementById('contact-email');
+  if (copyBtn && emailEl) {
+    copyBtn.addEventListener('click', function(){
+      var text = emailEl.textContent.trim();
+      function done(){
+        var original = copyBtn.textContent;
+        copyBtn.textContent = 'copiado!';
+        setTimeout(function(){ copyBtn.textContent = original; }, 1500);
+      }
+      try {
+        navigator.clipboard.writeText(text).then(done).catch(function(){
+          selectFallback();
+        });
+      } catch (e) {
+        selectFallback();
+      }
+      function selectFallback(){
+        try {
+          var range = document.createRange();
+          range.selectNodeContents(emailEl);
+          var sel = window.getSelection();
+          sel.removeAllRanges();
+          sel.addRange(range);
+          done();
+        } catch (e2) { /* silenciosamente ignora se nada funcionar */ }
+      }
+    });
+  }
+})();
+</script>
+</body>
+</html>

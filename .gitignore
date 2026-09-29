@@ -1,0 +1,15 @@
+node_modules/
+.env
+.env.*.local
+npm-debug.log*
+*.log
+.DS_Store
+Thumbs.db
+
+# Nao versionar musicas reais (evita subir arquivos protegidos por direitos
+# autorais para um repositorio publico). Mantenha .gitkeep para preservar as pastas.
+stations/**/*.mp3
+
+# Nunca versionar links de streams configurados localmente (podem conter
+# URLs privadas de um usuario especifico do fork).
+stations/**/stream.url
