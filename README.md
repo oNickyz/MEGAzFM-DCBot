@@ -1,5 +1,9 @@
 # MEGAzFM Core - (Open Source Version)
 
+[![MIT License](https://img.shields.io/github/license/oNickyz/MEGAzFM-DCBot)](LICENSE)
+[![Node.js >= 18](https://img.shields.io/badge/Node.js-%3E%3D18-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
+[![JavaScript](https://img.shields.io/badge/JavaScript-CommonJS-f7df1e?logo=javascript&logoColor=black)](package.json)
+
 Bot Discord leve e estável para rodar uma rádio 24/7 em um canal de voz, tocando
 arquivos MP3 locais e/ou estações de stream online (Icecast/Shoutcast).
 
@@ -13,28 +17,70 @@ das faixas locais.
 > (por exemplo, suporte a lives do YouTube) que **não fazem parte** deste
 > repositório público. Ver a seção "Open Source" abaixo.
 
+## ✨ Features
+
+- Reprodução de arquivos MP3 locais e de streams HTTP(S) diretos, como Icecast/Shoutcast. Streams do YouTube não são suportados no Core.
+- Estações configuradas por pastas, com seleção da estação inicial e troca durante a execução.
+- Reprodução automática ao conectar ao canal de voz, com modo shuffle e opção para evitar repetição imediata.
+- Consulta da faixa atual, prévia das próximas músicas e histórico recente.
+- Controles administrativos para pular faixas, ajustar volume, alternar shuffle, recarregar estações e reconectar à voz.
+- Reconexão automática configurável e comando manual `/reconnect`.
+- Exibição dos créditos/licença da faixa local no `/nowplaying`, quando informados em `playlist.json`.
+- Tentativa de definir o Voice Channel Status como “Powered by MEGAzFM” (permissão específica opcional).
+- Estado de espera quando não há conteúdo disponível; `/reload` reescaneia as estações após adicionar arquivos.
+- Organizador gráfico opcional para MP3: copia e ordena faixas e gera `playlist.json`, `CREDITS.txt` e `ORGANIZER_REPORT.txt`.
+
+O Core não possui comandos `/play` ou `/pause`: a reprodução começa pela estação configurada quando o bot inicia.
+
 ## Licença
 
-Este projeto é distribuído sob a **licença MIT** (ver arquivo `LICENSE` na
-raiz do repositório). Em resumo: qualquer pessoa pode usar, copiar,
-modificar, fazer fork e redistribuir este código, inclusive para fins
-comerciais, desde que mantenha o aviso de copyright original. O software é
-fornecido "como está", sem garantias.
+Este projeto é distribuído sob a **MIT License**. Consulte [`LICENSE`](LICENSE)
+para ver os termos completos. O arquivo jurídico é a referência em caso de
+dúvida.
 
 ## Instalação
 
+### Requisitos
+
+- Node.js 18 ou superior; Node.js 20 LTS é recomendado.
+- npm, incluído com o Node.js.
+- Uma aplicação/bot no Discord e um servidor com um canal de voz.
+- Python 3 com Tkinter apenas se for usar o organizador gráfico de músicas.
+
+### Baixar e instalar dependências
+
 ```bash
-git clone <url-do-repositorio>
-cd megazfm-core
+git clone https://github.com/oNickyz/MEGAzFM-DCBot.git
+cd MEGAzFM-DCBot
 npm install
-cp .env.example .env
-# edite o .env com os dados do seu bot
+```
+
+### Criar e configurar o bot no Discord
+
+1. Crie uma aplicação em [Discord Developer Portal](https://discord.com/developers/applications) e adicione um bot.
+2. Copie o token do bot e o Application ID. O token deve ficar somente no seu `.env`; nunca o publique.
+3. Convide o bot ao servidor com os escopos `bot` e `applications.commands`. Conceda `Connect` e `Speak` no canal de voz. `Set Voice Channel Status` é opcional. Os comandos administrativos exigem que quem os execute tenha a permissão Administrator no servidor.
+4. Ative o Modo Desenvolvedor no Discord para copiar o ID do canal de voz e, se desejar, o ID do servidor.
+
+### Configurar ambiente e iniciar
+
+Crie o arquivo `.env` a partir do exemplo (não substitua nem compartilhe o token real):
+
+```powershell
+Copy-Item .env.example .env
+```
+
+No macOS/Linux, use `cp .env.example .env`. Edite o `.env` local e preencha `DISCORD_TOKEN`, `CLIENT_ID` (Application ID) e `VOICE_CHANNEL_ID`. `GUILD_ID` é opcional: preenchido, registra os comandos naquele servidor; vazio, registra globalmente, o que pode levar até cerca de uma hora para propagar. Os outros parâmetros têm valores padrão documentados no `.env.example`.
+
+O bot registra os comandos automaticamente ao iniciar. Execute:
+
+```bash
 npm start
 ```
 
-Requisitos: Node.js 18+. FFmpeg é incluso automaticamente via `ffmpeg-static`
-(não precisa instalar FFmpeg manualmente na maioria dos casos). O organizador
-gráfico de músicas é opcional e requer Python 3 com Tkinter.
+Se precisar registrar os comandos manualmente, use `npm run deploy`.
+
+O projeto usa `ffmpeg-static` e tenta utilizar o binário incluído. Se ele não puder ser executado no ambiente, instale FFmpeg no sistema e configure `FFMPEG_PATH` com o caminho para esse executável. No Discloud, o `discloud.config` já declara FFmpeg como pacote APT.
 
 ## Configuração (`.env`)
 
@@ -42,7 +88,7 @@ Veja `.env.example` para a lista completa e comentada de variáveis. As
 principais:
 
 - `BOT_NAME`: nome exibido pelo bot. Único lugar que precisa ser mudado.
-- `DISCORD_TOKEN`, `CLIENT_ID`, `GUILD_ID`, `VOICE_CHANNEL_ID`: obrigatórios.
+- `DISCORD_TOKEN`, `CLIENT_ID` e `VOICE_CHANNEL_ID`: obrigatórios. `GUILD_ID` é opcional.
 - `TEXT_CHANNEL_ID`: opcional, canal de texto tradicional para avisos (NÃO é
   o "chat" associado automaticamente a um canal de voz - a API do Discord
   não garante isso de forma simples, por isso usamos um canal de texto
@@ -72,11 +118,13 @@ Nenhum arquivo MP3 real deve ser commitado no repositório (ver `.gitignore`).
 
 ## Organizador de músicas
 
-Na raiz do repositório, execute:
+Opcional. Requer Python 3 e Tkinter (em algumas distribuições Linux, Tkinter é instalado como pacote separado). Na raiz do repositório, execute:
 
 ```powershell
-python tools/organize_music.py
+py tools/organize_music.py
 ```
+
+Se `py` não estiver disponível, use `python tools/organize_music.py`.
 
 Selecione a pasta de origem e informe o nome da estação, um artista de reserva
 e os dados comuns de fonte/licença. O script procura MP3s recursivamente,
@@ -94,23 +142,23 @@ arquivos/metadados, use `/reload` para reescanear as estações.
 
 ## Comandos
 
-**Públicos**
-- `/nowplaying` — mostra estação, música atual e licença da faixa local.
-- `/estacoes` — lista estações e quantidade de músicas (ou indica "ao vivo").
-- `/fila` — previsão das próximas músicas (não é uma fila garantida).
-- `/historico` — últimas músicas tocadas.
-- `/estacao <nome>` — troca de estação (só funciona se `PUBLIC_STATION_SWITCH_ENABLED=true`, com cooldown).
+| Comando | Acesso | Descrição |
+| --- | --- | --- |
+| `/nowplaying` | Todos | Mostra estação, faixa, estado e licença informada para a faixa. |
+| `/estacoes` | Todos | Lista as estações e sua disponibilidade. |
+| `/fila` | Todos | Mostra uma previsão das próximas três faixas; não é uma fila garantida. |
+| `/historico` | Todos | Mostra até as cinco últimas faixas reproduzidas. |
+| `/estacao nome:<nome>` | Todos, se habilitado | Troca de estação com cooldown. Requer `PUBLIC_STATION_SWITCH_ENABLED=true`; administradores também podem usar o comando. |
+| `/station nome:<nome>` | Administradores | Troca de estação sem o cooldown público. |
+| `/skip` | Administradores | Pula a faixa atual. |
+| `/reload` | Administradores | Recarrega a biblioteca de estações sem reiniciar o bot. |
+| `/radio` | Administradores | Mostra o estado, a estação e a faixa atual. |
+| `/volume valor:<número>` | Administradores | Ajusta o volume para um valor entre `0` e `2` (`1` é o volume normal). |
+| `/shuffle ativo:<true\|false>` | Administradores | Ativa ou desativa a reprodução aleatória. |
+| `/reconnect` | Administradores | Força uma tentativa de reconexão ao canal de voz. |
+| `/addstream nome:<nome> url:<URL>` | Administradores | Cria ou atualiza uma estação de stream HTTP(S) direto. O nome aceita letras, números, `-` e `_`; URLs do YouTube são rejeitadas. |
 
-**Administradores** (`PermissionFlagsBits.Administrator`)
-- `/station <nome>` — troca de estação sem cooldown.
-- `/skip` — pula a música atual.
-- `/reload` — recarrega estações/músicas sem reiniciar o bot.
-- `/radio` — status geral.
-- `/volume <valor>` — ajusta volume (0 a 2).
-- `/shuffle <true|false>` — ativa/desativa modo aleatório.
-- `/reconnect` — força reconexão de voz.
-- `/addstream <nome> <url>` — adiciona uma estação de stream genérico (URLs do
-  YouTube são rejeitadas nesta versão - ver seção "Open Source" abaixo).
+Os comandos administrativos têm como permissão padrão Administrator do Discord. A troca pública por `/estacao` é desativada por padrão.
 
 ## Comportamento sem músicas
 
@@ -156,19 +204,20 @@ neste repositório GitHub. Qualquer pessoa pode:
 
 - estudar o código;
 - fazer fork do projeto;
-- modificar e adaptar o código, respeitando os termos da licença que vier
-a ser definida para o projeto (ver seção "Licença" acima);
+- modificar e adaptar o código sob os termos da MIT License;
 - hospedar sua própria instância da rádio.
 
-Esta versão pública representa o **Core** do MEGAzFM. A instância oficial
-usada pelo autor do projeto ("MEGAzFM Private") pode conter recursos
-adicionais/experimentais que **não fazem parte** deste repositório - por
-exemplo, suporte à transmissão de lives do YouTube. Esses recursos privados
-não são distribuídos publicamente e não são necessários para o
-funcionamento completo do Core.
+O **MEGAzFM Core** é a versão Open Source publicada neste repositório e
+distribuída sob a MIT License. A instância **MEGAzFM Private/Official** é
+separada, pode ter recursos adicionais, experimentais ou integrações que não
+fazem parte do Core e não são distribuídos aqui. A documentação deste
+repositório descreve somente o Core.
 
-Fork, modificação e redistribuição são permitidos pelos termos da licença
-MIT (ver seção "Licença" acima).
+Fork, modificação e redistribuição são permitidos pelos termos da MIT License
+(ver [`LICENSE`](LICENSE)).
+
+Consulte [`CONTRIBUTING.md`](CONTRIBUTING.md) para enviar contribuições ou
+relatar problemas.
 
 ## Fork e auto-hospedagem
 
