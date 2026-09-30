@@ -21,7 +21,8 @@ module.exports = {
         { name: 'Tocando', value: now.track || 'nada no momento', inline: true },
         { name: 'Estado', value: STATE_LABELS[now.state] || now.state, inline: true },
       )
-      .setColor(0x8a5cff);
+      .setColor(0x8a5cff)
+      .setFooter({ text: `Licença: ${now.license || 'não informada'}` });
 
     await interaction.reply({ embeds: [embed] });
   },

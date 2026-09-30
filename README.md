@@ -5,7 +5,8 @@ arquivos MP3 locais e/ou estações de stream online (Icecast/Shoutcast).
 
 Este é o pacote **Open Source** do projeto MEGAzFM. Ele contém apenas os
 recursos públicos: reprodução de MP3, sistema de estações, fila/histórico,
-volume, shuffle, reconexão de voz e os comandos principais.
+volume, shuffle, reconexão de voz, status do canal de voz e créditos/licenças
+das faixas locais.
 
 > Uma instância privada ("MEGAzFM Private/Official") pode existir separadamente,
 > reutilizando este pacote como dependência e adicionando recursos extras
@@ -32,7 +33,8 @@ npm start
 ```
 
 Requisitos: Node.js 18+. FFmpeg é incluso automaticamente via `ffmpeg-static`
-(não precisa instalar FFmpeg manualmente na maioria dos casos).
+(não precisa instalar FFmpeg manualmente na maioria dos casos). O organizador
+gráfico de músicas é opcional e requer Python 3 com Tkinter.
 
 ## Configuração (`.env`)
 
@@ -60,12 +62,40 @@ Cada subpasta dentro de `stations/` é uma estação:
 - **Estação de stream**: contém um arquivo chamado `stream.url` com a URL
   HTTP(S) do stream (ex: Icecast/Shoutcast) na primeira linha.
 
+Uma estação local pode incluir `playlist.json` com metadados de cada faixa.
+O campo `file` deve corresponder ao nome do MP3 dentro da pasta, e o campo
+`license` é exibido no rodapé do `/nowplaying`. Sem metadados ou sem licença
+informada, o comando mostra "Licença: não informada". `CREDITS.txt` é um
+registro para consulta e não é interpretado pelo bot.
+
 Nenhum arquivo MP3 real deve ser commitado no repositório (ver `.gitignore`).
+
+## Organizador de músicas
+
+Na raiz do repositório, execute:
+
+```powershell
+python tools/organize_music.py
+```
+
+Selecione a pasta de origem e informe o nome da estação, um artista de reserva
+e os dados comuns de fonte/licença. O script procura MP3s recursivamente,
+ordena os nomes naturalmente e copia os arquivos para `stations/<nome>` sem
+alterar os originais. Aceita nomes no formato `Artista - Faixa`, remove
+prefixos numéricos e extensões `.mp3` duplicadas, e cria nomes numerados.
+
+São gerados `playlist.json`, `CREDITS.txt` e `ORGANIZER_REPORT.txt`. Uma pasta
+de destino já existente e não vazia nunca é sobrescrita. A licença preenchida
+no diálogo se aplica a todas as faixas daquela execução; se as licenças forem
+diferentes, ajuste o campo `license` de cada faixa no JSON e mantenha os
+créditos correspondentes. O organizador não verifica licenças: mantenha
+"Não verificada" até confirmar os termos. Depois de adicionar ou alterar
+arquivos/metadados, use `/reload` para reescanear as estações.
 
 ## Comandos
 
 **Públicos**
-- `/nowplaying` — mostra estação e música atual.
+- `/nowplaying` — mostra estação, música atual e licença da faixa local.
 - `/estacoes` — lista estações e quantidade de músicas (ou indica "ao vivo").
 - `/fila` — previsão das próximas músicas (não é uma fila garantida).
 - `/historico` — últimas músicas tocadas.
@@ -104,6 +134,14 @@ geralmente está na etapa UDP da conexão de voz do Discord (separada do
 avisos claros. Causas comuns: firewall/antivirus bloqueando UDP, VPN, NAT
 restritivo, ou instabilidade regional nos servidores de voz do Discord
 (tente mudar a "Região" do canal de voz manualmente como teste).
+
+## Status do canal de voz
+
+Ao conectar ao canal configurado em `VOICE_CHANNEL_ID`, o bot tenta definir
+o status do canal como **Powered by MEGAzFM**. Para isso, conceda ao bot a
+permissão `Set Voice Channel Status`, além de `Connect` e `Speak`. Se a
+permissão de status estiver ausente ou a API recusar a alteração, a rádio
+continua funcionando e o motivo é registrado no log.
 
 ## Deploy na Discloud
 

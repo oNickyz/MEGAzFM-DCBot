@@ -1,5 +1,6 @@
 'use strict';
 
+const { Routes, PermissionFlagsBits } = require('discord.js');
 const { StationManager } = require('./stationManager');
 const { Playlist } = require('./playlist');
 const { VoicePlayer } = require('./player');
@@ -70,8 +71,9 @@ class RadioManager {
   }
 
   async connectVoice() {
+    let channel = null;
     try {
-      const channel = await this.guild.channels.fetch(this.config.voiceChannelId);
+      channel = await this.guild.channels.fetch(this.config.voiceChannelId);
       if (!channel) {
         logger.error('voice', `canal de voz ${this.config.voiceChannelId} nao encontrado`);
         return;
@@ -86,6 +88,23 @@ class RadioManager {
     }
 
     this.voicePlayer.connect();
+    if (channel) {
+      const me = this.guild.members.me;
+      const perms = me ? channel.permissionsFor(me) : null;
+      if (perms && perms.has(PermissionFlagsBits.SetVoiceChannelStatus)) {
+        try {
+          await this.guild.client.rest.put(Routes.channelVoiceStatus(channel.id), {
+            body: { status: 'Powered by MEGAzFM' },
+          });
+          logger.info('voice', 'status do canal atualizado para "Powered by MEGAzFM"');
+        } catch (err) {
+          logger.warn('voice', `nao foi possivel atualizar o status do canal: ${err.message}`);
+        }
+      } else {
+        logger.warn('voice', 'sem permissao Set Voice Channel Status; status da call nao foi atualizado');
+      }
+    }
+
     const ready = await this.voicePlayer.waitUntilReady();
     if (ready) {
       logger.info('voice', 'pronto para reproduzir audio');
@@ -224,6 +243,9 @@ class RadioManager {
   getNowPlaying() {
     const info = this.currentStation ? this.stationManager.getStationInfo(this.currentStation) : null;
     const isLive = !!info && info.type === 'stream';
+    const trackMetadata = this.currentStation && this.currentTrackPath
+      ? this.stationManager.getTrackMetadata(this.currentStation, this.currentTrackPath)
+      : null;
     let track = null;
     if (isLive) {
       track = '🔴 Transmissao ao vivo';
@@ -234,6 +256,7 @@ class RadioManager {
     return {
       station: this.currentStation,
       track,
+      license: trackMetadata ? trackMetadata.license : null,
       state: this.state,
       isLive,
     };

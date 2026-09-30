@@ -70,7 +70,7 @@ class StationManager {
     const streamMarker = files.find((f) => f.toLowerCase() === STREAM_MARKER_FILE);
     if (streamMarker) {
       const streamUrl = this._readStreamUrl(path.join(stationDir, streamMarker));
-      return { type: 'stream', tracks: [], streamUrl };
+      return { type: 'stream', tracks: [], streamUrl, trackMetadata: {} };
     }
 
     const tracks = files
@@ -78,7 +78,25 @@ class StationManager {
       .sort((a, b) => a.localeCompare(b, 'pt-BR'))
       .map((f) => path.join(stationDir, f));
 
-    return { type: 'local', tracks, streamUrl: null };
+    return { type: 'local', tracks, streamUrl: null, trackMetadata: this._readTrackMetadata(stationDir) };
+  }
+
+  _readTrackMetadata(stationDir) {
+    try {
+      const playlistPath = path.join(stationDir, 'playlist.json');
+      const playlist = JSON.parse(fs.readFileSync(playlistPath, 'utf8'));
+      if (!Array.isArray(playlist.tracks)) return {};
+
+      return Object.fromEntries(
+        playlist.tracks
+          .filter((track) => track && typeof track.file === 'string')
+          .map((track) => [path.basename(track.file), {
+            license: typeof track.license === 'string' ? track.license : null,
+          }])
+      );
+    } catch (err) {
+      return {};
+    }
   }
 
   _readStreamUrl(filePath) {
@@ -126,6 +144,12 @@ class StationManager {
     const info = this.getStationInfo(name);
     if (!info || info.type !== 'local') return [];
     return info.tracks;
+  }
+
+  getTrackMetadata(name, filePath) {
+    const info = this.getStationInfo(name);
+    if (!info || info.type !== 'local') return null;
+    return info.trackMetadata[path.basename(filePath)] || null;
   }
 }
 
